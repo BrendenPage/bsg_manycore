@@ -230,6 +230,7 @@ module bsg_nonsynth_manycore_testbench
       ,.y_cord_width_p(y_cord_width_p)
       ,.addr_width_p(addr_width_p)
       ,.data_width_p(data_width_p)
+      ,.barrier_ruche_factor_X_p(barrier_ruche_factor_X_p)
       ,.num_subarray_x_p(num_subarray_x_p)
       ,.num_subarray_y_p(num_subarray_y_p)
 

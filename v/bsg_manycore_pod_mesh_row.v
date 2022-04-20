@@ -17,6 +17,7 @@ module bsg_manycore_pod_mesh_row
     , `BSG_INV_PARAM(y_cord_width_p)
     , `BSG_INV_PARAM(addr_width_p)
     , `BSG_INV_PARAM(data_width_p)
+    , barrier_ruche_factor_X_p = 3
     , num_subarray_x_p=1
     , num_subarray_y_p=1
 
@@ -93,6 +94,8 @@ module bsg_manycore_pod_mesh_row
   bsg_manycore_link_sif_s [num_pods_x_p-1:0][S:N][num_tiles_x_p-1:0] ver_link_sif_li, ver_link_sif_lo;
   wh_link_sif_s [num_pods_x_p-1:0][S:N][E:W][num_vcache_rows_p-1:0][wh_ruche_factor_p-1:0] wh_link_sif_li, wh_link_sif_lo;
   logic [num_pods_x_p-1:0][E:W][num_tiles_y_p-1:0] hor_barrier_link_li, hor_barrier_link_lo;
+  logic [num_pods_x_p-1:0][E:W][num_tiles_y_p-1:0][barrier_ruche_factor_X_p-1:0] barrier_ruche_link_li, barrier_ruche_link_lo;
+
 
   for (genvar x = 0; x < num_pods_x_p; x++) begin: px
 
@@ -105,7 +108,8 @@ module bsg_manycore_pod_mesh_row
       ,.y_cord_width_p(y_cord_width_p)
       ,.addr_width_p(addr_width_p)
       ,.data_width_p(data_width_p)
-      
+      ,.barrier_ruche_factor_X_p(barrier_ruche_factor_X_p)     
+
       ,.num_subarray_x_p(num_subarray_x_p)
       ,.num_subarray_y_p(num_subarray_y_p)
 
@@ -142,6 +146,8 @@ module bsg_manycore_pod_mesh_row
       ,.ver_link_sif_o(ver_link_sif_lo[x])
       ,.hor_barrier_link_i(hor_barrier_link_li[x])
       ,.hor_barrier_link_o(hor_barrier_link_lo[x])
+      ,.barrier_ruche_link_i(barrier_ruche_link_li[x])
+      ,.barrier_ruche_link_o(barrier_ruche_link_lo[x])
 
       ,.north_wh_link_sif_i(wh_link_sif_li[x][N])
       ,.north_wh_link_sif_o(wh_link_sif_lo[x][N])
@@ -169,6 +175,9 @@ module bsg_manycore_pod_mesh_row
       // barrier hor
       assign hor_barrier_link_li[x][E] = hor_barrier_link_lo[x+1][W];
       assign hor_barrier_link_li[x+1][W] = hor_barrier_link_lo[x][E];
+      // barrier ruche
+      assign barrier_ruche_link_li[x][E] = barrier_ruche_link_lo[x+1][W];
+      assign barrier_ruche_link_li[x+1][W] = barrier_ruche_link_lo[x][E];
     end
 
     // connect horizontal links on the side to the west
@@ -229,6 +238,13 @@ module bsg_manycore_pod_mesh_row
     // local
     assign hor_barrier_link_li[0][W][y] = 1'b0;
     assign hor_barrier_link_li[num_pods_x_p-1][E][y] = 1'b0;
+    // ruche (hardcoded for ruche factor of 3 for now)
+    assign barrier_ruche_link_li[0][W][y][0] = 1'b0;
+    assign barrier_ruche_link_li[0][W][y][1] = 1'b0;
+    assign barrier_ruche_link_li[0][W][y][2] = 1'b1;
+    assign barrier_ruche_link_li[num_pods_x_p-1][E][y][0] = 1'b0;
+    assign barrier_ruche_link_li[num_pods_x_p-1][E][y][1] = 1'b1;
+    assign barrier_ruche_link_li[num_pods_x_p-1][E][y][2] = 1'b0;
   end
 
 endmodule

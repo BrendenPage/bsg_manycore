@@ -21,6 +21,7 @@ module bsg_manycore_pod_mesh_array
     , `BSG_INV_PARAM(y_cord_width_p)
     , `BSG_INV_PARAM(addr_width_p)
     , `BSG_INV_PARAM(data_width_p)
+    , barrier_ruche_factor_X_p = 3
 
     , num_subarray_x_p=1
     , num_subarray_y_p=1
@@ -38,7 +39,7 @@ module bsg_manycore_pod_mesh_array
     , `BSG_INV_PARAM(vcache_block_size_in_words_p)
     , `BSG_INV_PARAM(vcache_size_p)
     , `BSG_INV_PARAM(vcache_dma_data_width_p)
-
+    
     , wh_ruche_factor_p=2 // only support 2 for now
     , `BSG_INV_PARAM(wh_cid_width_p)
     , `BSG_INV_PARAM(wh_flit_width_p)
@@ -138,6 +139,7 @@ module bsg_manycore_pod_mesh_array
       ,.addr_width_p(addr_width_p)
       ,.data_width_p(data_width_p)
 
+      ,.barrier_ruche_factor_X_p(barrier_ruche_factor_X_p)
       ,.num_pods_x_p(num_pods_x_p)    
   
       ,.num_subarray_x_p(num_subarray_x_p)
