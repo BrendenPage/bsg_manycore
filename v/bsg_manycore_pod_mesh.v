@@ -44,9 +44,6 @@ module bsg_manycore_pod_mesh
     , `BSG_INV_PARAM(vcache_size_p)
     , `BSG_INV_PARAM(vcache_dma_data_width_p)
 
-    , `BSG_INV_PARAM(ruche_factor_X_p)
-    , `BSG_INV_PARAM(barrier_ruche_factor_X_p)
-
     , `BSG_INV_PARAM(wh_ruche_factor_p)
     , `BSG_INV_PARAM(wh_cid_width_p)
     , `BSG_INV_PARAM(wh_flit_width_p)
@@ -174,7 +171,6 @@ module bsg_manycore_pod_mesh
   // manycore subarray
   bsg_manycore_link_sif_s [num_subarray_y_p-1:0][num_subarray_x_p-1:0][E:W][subarray_num_tiles_y_lp-1:0] mc_hor_link_sif_li, mc_hor_link_sif_lo;
   bsg_manycore_link_sif_s [num_subarray_y_p-1:0][num_subarray_x_p-1:0][S:N][subarray_num_tiles_x_lp-1:0] mc_ver_link_sif_li, mc_ver_link_sif_lo;
-  bsg_manycore_ruche_x_link_sif_s [num_subarray_y_p-1:0][num_subarray_x_p-1:0][E:W][subarray_num_tiles_y_lp-1:0][ruche_factor_X_p-1:0] mc_ruche_link_li, mc_ruche_link_lo;
   logic [num_subarray_y_p-1:0][num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][x_cord_width_p-1:0] mc_global_x_li, mc_global_x_lo;
   logic [num_subarray_y_p-1:0][num_subarray_x_p-1:0][subarray_num_tiles_x_lp-1:0][y_cord_width_p-1:0] mc_global_y_li, mc_global_y_lo;
 
@@ -354,10 +350,8 @@ module bsg_manycore_pod_mesh
       ,.wh_flit_width_p(wh_flit_width_p)
       ,.wh_len_width_p(wh_len_width_p)
       ,.wh_cord_width_p(wh_cord_width_p)
-
-      ,.num_clk_ports_p(num_clk_ports_p)
     ) south_vc_row (
-      .clk_i({num_clk_ports_p{clk_i}})
+      .clk_i(clk_i)
       ,.reset_i(south_vc_reset_li[x])
       ,.reset_o()
     
@@ -413,4 +407,4 @@ module bsg_manycore_pod_mesh
 
 endmodule
 
-`BSG_ABSTRACT_MODULE(bsg_manycore_pod_ruche)
+`BSG_ABSTRACT_MODULE(bsg_manycore_pod_mesh)

@@ -142,7 +142,7 @@ module bsg_manycore_tile_compute_mesh
     ,.addr_width_p(addr_width_p)
     ,.debug_p(debug_p)
     ,.repeater_output_p(repeater_output_p) // select buffer for this particular node
-    ,.ruche_factor_X_p(ruche_factor_X_p)
+    ,.ruche_factor_X_p(0)
     ,.fwd_use_credits_p(fwd_use_credits_lp)
     ,.fwd_fifo_els_p(fwd_fifo_els_lp)
     ,.rev_use_credits_p(rev_use_credits_lp)
