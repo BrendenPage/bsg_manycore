@@ -67,12 +67,12 @@ module bsg_manycore_tile_compute_array_mesh
     , output logic [subarray_num_tiles_x_p-1:0] reset_o
 
     // horizontal -- {E,W}
-    , input  [E:W][num_tiles_y_p-1:0][link_sif_width_lp-1:0] hor_link_sif_i
-    , output [E:W][num_tiles_y_p-1:0][link_sif_width_lp-1:0] hor_link_sif_o
+    , input  [E:W][subarray_num_tiles_y_p-1:0][link_sif_width_lp-1:0] hor_link_sif_i
+    , output [E:W][subarray_num_tiles_y_p-1:0][link_sif_width_lp-1:0] hor_link_sif_o
 
     // vertical -- {S,N}
-    , input  [S:N][num_tiles_x_p-1:0][link_sif_width_lp-1:0] ver_link_sif_i
-    , output [S:N][num_tiles_x_p-1:0][link_sif_width_lp-1:0] ver_link_sif_o
+    , input  [S:N][subarray_num_tiles_x_p-1:0][link_sif_width_lp-1:0] ver_link_sif_i
+    , output [S:N][subarray_num_tiles_x_p-1:0][link_sif_width_lp-1:0] ver_link_sif_o
   
     // barrier local link
     , input  [S:N][subarray_num_tiles_x_p-1:0] ver_barrier_link_i
@@ -114,7 +114,7 @@ module bsg_manycore_tile_compute_array_mesh
 
   // Instantiate tiles.
   `declare_bsg_manycore_link_sif_s(addr_width_p,data_width_p,x_cord_width_p,y_cord_width_p);
-  bsg_manycore_link_sif_s [num_tiles_y_p-1:0][num_tiles_x_p-1:0][S:W] link_in, link_out;
+  bsg_manycore_link_sif_s [subarray_num_tiles_y_p-1:0][subarray_num_tiles_x_p-1:0][S:W] link_in, link_out;
 
   logic [subarray_num_tiles_y_p-1:0][subarray_num_tiles_x_p-1:0][x_cord_width_p-1:0] global_x_li, global_x_lo;
   logic [subarray_num_tiles_y_p-1:0][subarray_num_tiles_x_p-1:0][y_cord_width_p-1:0] global_y_li, global_y_lo;
@@ -198,8 +198,8 @@ module bsg_manycore_tile_compute_array_mesh
 
   bsg_mesh_stitch #(
     .width_p(link_sif_width_lp)
-    ,.x_max_p(num_tiles_x_p)
-    ,.y_max_p(num_tiles_y_p)
+    ,.x_max_p(subarray_num_tiles_x_p)
+    ,.y_max_p(subarray_num_tiles_y_p)
   ) link (
     .outs_i(link_out)
     ,.ins_o(link_in)
