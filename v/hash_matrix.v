@@ -24,10 +24,6 @@ module hash_matrix
     end
   endgenerate
 
-  always @(x_cord_o) begin
-    $display("\neva: %x\nx_cord_o: %x", eva_i, addr[3:0]);
-  end
-
   assign x_cord_o = addr;
 
 endmodule

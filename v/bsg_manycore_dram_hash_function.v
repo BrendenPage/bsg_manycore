@@ -72,10 +72,6 @@ module bsg_manycore_dram_hash_function
     };
   end
 
-  // always @(eva_i) begin
-  //   $display("\n\nWidth: %d\n", dram_index_width_lp);
-  // end
-
   wire [dram_index_width_lp-1:0] dram_index = eva_i[2+vcache_word_offset_width_lp+x_subcord_width_p+vcache_row_id_width_lp+:dram_index_width_lp];
 
 
