@@ -43,14 +43,25 @@ module bsg_manycore_dram_hash_function
 
 
   wire [vcache_row_id_width_lp-1:0] vcache_row_id = eva_i[2+vcache_word_offset_width_lp+x_subcord_width_p+:vcache_row_id_width_lp];
-  wire [x_subcord_width_p-1:0] dram_x_subcord = eva_i[2+vcache_word_offset_width_lp+:x_subcord_width_p];
+  // wire [x_subcord_width_p-1:0] dram_x_subcord = eva_i[2+vcache_word_offset_width_lp+:x_subcord_width_p];
   wire [y_subcord_width_p-1:0] dram_y_subcord;
   wire [pod_y_cord_width_p-1:0] dram_pod_y_cord = vcache_row_id[0]
     ? pod_y_cord_width_p'(pod_y_i+1)
     : pod_y_cord_width_p'(pod_y_i-1);
 
+  logic is_south_lo;
+  logic [x_subcord_width_p-1:0] dram_x_subcord;
+
+  hash_matrix #(.data_width_p(data_width_p)
+               ,.x_subcord_width_p(x_subcord_width_p))
+               hash_function
+               (.eva_i(eva_i)
+               ,.x_cord_o(dram_x_subcord)
+               );
+
   if (num_vcache_rows_p == 1) begin
     assign dram_y_subcord = {y_subcord_width_p{~vcache_row_id[0]}};
+    // assign dram_y_subcord = {y_subcord_width_p{is_south_lo}};
   end
   else begin
     assign dram_y_subcord = {
@@ -60,6 +71,10 @@ module bsg_manycore_dram_hash_function
         : ~vcache_row_id[vcache_row_id_width_lp-1:1])
     };
   end
+
+  // always @(eva_i) begin
+  //   $display("\n\nWidth: %d\n", dram_index_width_lp);
+  // end
 
   wire [dram_index_width_lp-1:0] dram_index = eva_i[2+vcache_word_offset_width_lp+x_subcord_width_p+vcache_row_id_width_lp+:dram_index_width_lp];
 
